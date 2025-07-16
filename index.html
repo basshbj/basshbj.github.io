@@ -1,137 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Bassam – Mood Board</title>
-<style>
-:root{
-  --bg: #faf8f4;
-  --texture: url('https://www.transparenttextures.com/patterns/cardboard.png');
-  --text: #333;
-  --subtitle: #555;
-  --accent: #4b2aae;
-  --accent-dark: #382090;
-  --note-tech-bg: #d1f7ff;
-  --note-tech-border: #67d9ed;
-  --note-creative-bg: #ffe1f0;
-  --note-creative-border: #f48fb1;
-  --note-bold-bg: #d6ffce;
-  --note-bold-border: #70d37f;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bassam Al‑Mahamid – Mood‑Board CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f2ebdf;
+      --card: #fffefa;
+      --accent: #ffecd2;
+      --accent2: #ffd7d1;
+      --ink: #252525;
+      --pin: #555;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.4;
+    }
+    h1,h2 { margin-bottom:0.6rem; font-weight:800; }
+    h3 { margin-top:0.4rem; font-weight:600; }
 
-*{box-sizing:border-box;margin:0;padding:0}
+    /* --- Two-column flex layout for desktop --- */
+    .board {
+      display: flex;
+      gap: 1.8rem;
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    .col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
 
-body{
-  font-family:'Segoe UI',sans-serif;
-  background: var(--bg) var(--texture);
-  color:var(--text);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
+    .card {
+      position: relative;
+      background: var(--card);
+      border-radius: 0.75rem;
+      padding: 1.6rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+      transition: transform 0.2s ease;
+      break-inside: avoid;
+    }
+    .card::before {
+      content: '';
+      width:0.9rem; height:0.9rem;
+      background:var(--pin);
+      border-radius:50%;
+      position:absolute;
+      top:-0.45rem; left:50%;
+      transform: translateX(-50%);
+    }
+    .card:nth-child(odd) { transform: rotate(-1deg); }
+    .card:nth-child(even){ transform: rotate(1.2deg); }
+    .card:hover { transform: rotate(0deg) scale(1.04); }
+    .sticky { background: var(--accent); }
+    .peach  { background: var(--accent2); }
 
-header{
-  text-align:center;
-  padding:2.5rem 1rem 2rem;
-}
-header h1{font-size:clamp(2rem,5vw,2.75rem);margin-bottom:0.5rem}
-header p{color:var(--subtitle);font-size:1.1rem;max-width:35ch;margin-inline:auto}
+    /* --- Photo styling --- */
+    .photo-card {
+      background: none;
+      box-shadow: none;
+      padding: 0;
+      align-self: center;
+    }
+    .photo-card::before {
+      content: '';
+      width:60px; height:16px;
+      background: var(--accent);
+      position:absolute;
+      top:-8px; left:50%;
+      transform: translateX(-50%) rotate(-3deg);
+      border-radius:2px;
+    }
+    .photo-card img {
+      width:100%; height:auto;
+      max-width:400px;
+      border:1rem solid var(--card);
+      border-radius:0.5rem;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      display:block;
+    }
 
-.top-cta{margin-top:1.5rem;}
+    /* --- Tags & lists --- */
+    .tags span {
+      display:inline-block;
+      background:var(--accent);
+      border-radius:0.5rem;
+      padding:0.3rem 0.8rem;
+      margin:0.3rem 0.4rem 0.3rem 0;
+      font-size:0.85rem;
+      font-weight:600;
+    }
+    ul { padding-left:1.2rem; margin-top:0.6rem; }
+    ul li { margin:0.4rem 0; }
+    .btn {
+      display:inline-block;
+      background:var(--card);
+      padding:0.8rem 1.4rem;
+      border-radius:1rem;
+      box-shadow:0 1px 3px rgba(0,0,0,0.1);
+      text-decoration:none;
+      font-weight:600;
+      margin-top:0.6rem;
+    }
 
-a.button{
-  display:inline-block;
-  padding:0.75rem 1.5rem;
-  background:var(--accent);
-  color:#fff;
-  font-weight:600;
-  text-decoration:none;
-  border-radius:8px;
-  transition:transform .2s ease, background .3s ease;
-}
-a.button:hover{background:var(--accent-dark);transform:translateY(-2px);}
-
-.board{
-  width:min(1200px, 100%);
-  display:grid;
-  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
-  gap:2rem;
-  padding:0 1rem 3rem;
-}
-
-.note{
-  position:relative;
-  padding:1.25rem 1.25rem 1.5rem;
-  border-radius:8px;
-  box-shadow:3px 3px 10px rgba(0,0,0,.15);
-  transition:transform .2s ease;
-}
-.note:hover{transform:rotate(2deg) scale(1.04); z-index:1;}
-
-.note.tech{background:var(--note-tech-bg);border:2px solid var(--note-tech-border);} 
-.note.creative{background:var(--note-creative-bg);border:2px solid var(--note-creative-border);} 
-.note.bold{background:var(--note-bold-bg);border:2px solid var(--note-bold-border);} 
-
-.note h3{font-size:1rem;margin-bottom:0.5rem;line-height:1.3}
-.note p{font-size:0.9rem;line-height:1.4}
-.note a{color:var(--accent-dark);text-decoration:underline}
-
-footer{padding:1.5rem 0 3rem;text-align:center;}
-
-.note:nth-child(odd){transform:rotate(-2.5deg);} 
-.note:nth-child(even){transform:rotate(1.5deg);} 
-
-@media (min-width:900px){
-  .board{gap:3rem 2rem;}
-}
-</style>
+    /* --- Mobile single column with custom order --- */
+    @media (max-width:600px) {
+      .board {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "name"
+          "contact"
+          "position"
+          "photo"
+          "skills"
+          "about"
+          "experience"
+          "certificates"
+          "languages"
+          "education"
+          "community";
+        gap: 1.8rem;
+      }
+      .col { display: contents; }
+      .name        { grid-area: name; }
+      .contact     { grid-area: contact; }
+      .position    { grid-area: position; }
+      .photo-card  { grid-area: photo; }
+      .skills      { grid-area: skills; }
+      .about       { grid-area: about; }
+      .experience  { grid-area: experience; }
+      .certificates{ grid-area: certificates; }
+      .languages   { grid-area: languages; }
+      .education   { grid-area: education; }
+      .community   { grid-area: community; }
+      .photo-card img { max-width:100%; }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Bassam's Mood Board</h1>
-  <p>A creative snapshot of what I do, how I think, and what I love to build.</p>
-  <div class="top-cta">
-     <a class="button" href="https://www.linkedin.com/in/bassam-manuel-al-mahamid-velez-2061a1120/" target="_blank" aria-label="Visit Bassam's full profile on LinkedIn">🔗 See the Full Picture on LinkedIn</a>
+<main class="board">
+  <div class="col">
+    <section class="card sticky name">
+      <h1>Bassam Al‑Mahamid</h1>
+    </section>
+    <section class="card sticky position">
+      <h2>AI &amp; Azure Solution Architect 🚀</h2>
+      </br>
+      <h2>Senior Consultant</h2>
+    </section>
+    <section class="card skills">
+      <h2>Skills ⚙️</h2>
+      <div class="tags">
+        <span>Azure</span><span>Generative AI</span><span>AI Agents</span><span>RAG</span><span>Python</span><span>.NET C#</span><span>React</span><span>Docker</span><span>IaC</span>
+      </div>
+    </section>
+    <section class="card about">
+      <h2>About Me 💡</h2>
+      <p>
+        Proactive, innovative engineer with 7 + yrs in Japan’s tech scene, specializing in Azure &amp; Generative AI. Avanade Japan Tech Star 2024 &amp; Microsoft Japan Top Partner AI Engineer 2024. Co‑author of <em>Azure OpenAI Service Practice Guide</em>. Designing AI agents that bridge business &amp; tech to create real‑world impact.
+      </p>
+    </section>
+    <section class="card experience">
+      <h2>Experience 🛠️</h2>
+      <h3>Avanade – Microsoft AI Co‑Innovation Lab</h3>
+      <p>
+        <strong>Lead Engineer · AI &amp; Azure Solution Architect</strong><br/>Oct 2023 – Present | Kobe, JP</p>
+        <ul>
+          <li>Delivered 10+ AI projects (Cloud Architecture/AI agents/RAG/Data Platform)</li>
+          <li>Designed secure, scalable Azure architectures</li>
+          <li>Business Development &amp; Pre-sales support</li>
+        </ul>
+        <h3 style="margin-top:1rem;">Avanade</h3>
+        <p><strong>Senior Consultant · Azure Architect &amp; Developer</strong><br/>Sep 2019 – Present | Osaka, JP</p>
+        <ul>
+          <li>Built MLOps platform on Azure ML</li>
+          <li>Data Platform on Snowflake</li>
+          <li>Full‑stack dev: .NET, Python, React, Docker</li>
+        </ul>
+      </section>
+    <section class="card education sticky"><h2>Education 🎓</h2><ul><li>Seifu Technical College – Software Eng. <small>(2015‑2017)</small></li><li>Osaka JEC – Japanese Course <small>(2014‑2015)</small></li><li>Complutense Univ. – Systems Eng. <small>(2011‑2014)</small></li></ul></section>
   </div>
-</header>
-
-<main>
-  <section class="board" aria-label="Mood Board Highlights">
-    <article class="note tech">
-      <h3>🔧 Azure Architect</h3>
-      <p>Building scalable, secure cloud systems.</p>
-    </article>
-
-    <article class="note creative">
-      <h3>📘 Co‑Author</h3>
-      <p>Wrote about Azure OpenAI. Loved making it beginner‑friendly. <a href="https://www.amazon.co.jp/dp/B0CQL3LGSM" target="_blank">Read it →</a></p>
-    </article>
-
-    <article class="note bold">
-      <h3>🚀 AI Innovation</h3>
-      <p>10+ delivered projects at Microsoft AI Co‑Innovation Lab.</p>
-    </article>
-
-    <article class="note tech">
-      <h3>🧠 GenAI Mastery</h3>
-      <p>Built agentic apps using Azure OpenAI.</p>
-    </article>
-
-    <article class="note creative">
-      <h3>🎤 Speaker</h3>
-      <p>Sharing knowledge through events and training sessions.</p>
-    </article>
-
-    <article class="note bold">
-      <h3>🤖 Coder</h3>
-      <p>I love to build things and research new ideas.</p>
-    </article>
-  </section>
+  <div class="col">
+    <section class="card peach contact">
+      <h2>Contact 📫</h2>
+      <p>
+        <strong>Email:</strong> bassamhbj@gmail.com
+      </p>
+      <p>
+        <strong>GitHub:</strong> <a href="https://github.com/basshbj" target="_blank">github.com/basshbj</a>
+      </p>
+      <p>
+        <strong>LinkedIn:</strong> <a href="www.linkedin.com/in/bassam-manuel-al-mahamid-velez-2061a1120" target="_blank">My Profile</a>
+      </p>
+      <a href="mailto:bassamhbj@gmail.com" class="btn">Send a Message</a>
+    </section>
+    <section class="card photo-card">
+      <img src="profile.png" alt="Profile Photo" />
+    </section>
+    <section class="card peach certificates">
+      <h2>Certificates 🏅</h2>
+      <p>AZ‑104 · AZ‑204 · AZ‑303/304 · AI‑102</p>
+      <h2 style="margin-top:1rem;">Awards 🏆</h2>
+      <p>Microsoft Top Partner AI Engineer 2024<br/>Avanade Japan Tech Star 2024</p>
+    </section>
+    <section class="card sticky languages">
+      <h2>Languages 🌏</h2>
+      <p>Spanish – Native<br/>Japanese – Business<br/>English – Business</p>
+    </section>
+    <section class="card community">
+      <h2>Community 🎤</h2>
+      <ul>
+        <li>Edge Tech+ 2024 Speaker (SLM)</li>
+        <li>TECH PLAY AI Quiz Game Session</li>
+        <li>Kansai Generative AI Study Community Speaker</li>
+        <li>Techbeer IoT Craft Beer Developer</li>
+      </ul>
+    </section>
+  </div>
 </main>
-
-<footer>
-  <a class="button" href="https://www.linkedin.com/in/bassam-manuel-al-mahamid-velez-2061a1120/" target="_blank">🔗 See the Full Picture on LinkedIn</a>
-</footer>
 </body>
 </html>
