@@ -14,6 +14,14 @@
       --accent2: #ffd7d1;
       --ink: #252525;
       --pin: #555;
+
+      /* Six distinct tag colors */
+      --tag1: #FFB3BA;
+      --tag2: #FFDFBA;
+      --tag3: #FFFFBA;
+      --tag4: #BAFFC9;
+      --tag5: #BAE1FF;
+      --tag6: #E3BAFF;
     }
     *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
     body {
@@ -92,13 +100,24 @@
     /* --- Tags & lists --- */
     .tags span {
       display:inline-block;
-      background:var(--accent);
+      /* background:var(--accent); */
       border-radius:0.5rem;
       padding:0.3rem 0.8rem;
       margin:0.3rem 0.4rem 0.3rem 0;
       font-size:0.85rem;
       font-weight:600;
     }
+    /* Assign distinct colors to first six tags */
+    .tag1 { background: var(--tag1); }
+    .tag2 { background: var(--tag2); }
+    .tag3 { background: var(--tag3); }
+    .tag4 { background: var(--tag4); }
+    .tag5 { background: var(--tag5); }
+    .tag6 { background: var(--tag6); }
+    /* .tags span:nth-child(3) { background: var(--tag3); }
+    .tags span:nth-child(4) { background: var(--tag4); }
+    .tags span:nth-child(5) { background: var(--tag5); }
+    .tags span:nth-child(6) { background: var(--tag6); } */
     ul { padding-left:1.2rem; margin-top:0.6rem; }
     ul li { margin:0.4rem 0; }
     .btn {
@@ -161,7 +180,29 @@
     <section class="card skills">
       <h2>Skills ⚙️</h2>
       <div class="tags">
-        <span>Azure</span><span>Generative AI</span><span>AI Agents</span><span>RAG</span><span>Python</span><span>.NET C#</span><span>React</span><span>Docker</span><span>IaC</span>
+        <span class="tag1">Azure</span>
+        <span class="tag1">Microsoft Power Platform</span>
+        <span class="tag1">Microsoft Fabric</span>
+        <br/>
+        <span class="tag2">Generative AI</span>
+        <span class="tag2">AI Agents</span>
+        <span class="tag2">RAG</span>
+        <br/>
+        <span class="tag3">Machine Learning</span>
+        <span class="tag3">AutoML</span>
+        <br>
+        <span class="tag4">Python</span>
+        <span class="tag4">.NET C#</span>
+        <span class="tag4">Java</span>
+        <span class="tag4">JavaScript</span>
+        <br/>
+        <span class="tag5">PowerShell</span>
+        <span class="tag5">Shell</span>
+        <span class="tag5">IaC</span>
+        <br/>
+        <span class="tag6">Docker</span>
+        <span class="tag6">Kubernetes</span>
+        <span class="tag6">Snowflake</span>
       </div>
     </section>
     <section class="card about">
