@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <style>
     :root {
+      --texture: url('https://www.transparenttextures.com/patterns/cardboard.png');
       --bg: #f2ebdf;
       --card: #fffefa;
       --accent: #ffecd2;
@@ -17,7 +18,7 @@
     *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
+      background: var(--bg) var(--texture);
       color: var(--ink);
       line-height: 1.4;
     }
