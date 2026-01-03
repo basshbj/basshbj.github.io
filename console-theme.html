@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Bassam — Operator Mode</title>
+  <style>
+    :root{
+      --bg: #070A0F;
+      --panel: rgba(255,255,255,0.04);
+      --panel2: rgba(255,255,255,0.06);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.62);
+      --dim: rgba(255,255,255,0.38);
+      --accent: #7CFFB2;
+      --accent2: #66A3FF;
+      --warn: #FFCC66;
+      --danger: #FF6B6B;
+      --border: rgba(255,255,255,0.09);
+      --shadow: 0 20px 60px rgba(0,0,0,0.55);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      --r: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(102,163,255,0.14), transparent 60%),
+        radial-gradient(900px 600px at 80% 30%, rgba(124,255,178,0.12), transparent 55%),
+        radial-gradient(1200px 900px at 50% 100%, rgba(255,204,102,0.06), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
+      line-height:1.4;
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px 16px;
+    }
+
+    .shell{
+      width:min(980px, 100%);
+      border:1px solid var(--border);
+      background:linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      background:rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+    }
+
+    .dots{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .dot{ width:10px; height:10px; border-radius:999px; background:rgba(255,255,255,0.18); }
+    .dot.red{ background:#FF5F57; }
+    .dot.yellow{ background:#FEBC2E; }
+    .dot.green{ background:#28C840; }
+
+    .title{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:0.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .status{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--dim);
+    }
+    .pill{
+      border:1px solid var(--border);
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.03);
+    }
+    .pill strong{ color:var(--text); font-weight:600; }
+
+    .terminal{
+      padding:18px;
+      font-family:var(--mono);
+      font-size:14px;
+    }
+
+    .row{ margin:10px 0; }
+    .promptline{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .prompt{
+      color:var(--accent);
+      user-select:none;
+    }
+    .caret{
+      width:10px;
+      height:18px;
+      border-left:2px solid var(--accent);
+      display:inline-block;
+      opacity:0.9;
+      animation: blink 1.05s step-end infinite;
+      transform: translateY(2px);
+    }
+    @keyframes blink { 50% { opacity:0; } }
+
+    .inputwrap{
+      flex:1;
+      min-width:220px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    input.cmd{
+      width:100%;
+      background:transparent;
+      border:none;
+      outline:none;
+      color:var(--text);
+      font-family:var(--mono);
+      font-size:14px;
+      padding:0;
+      caret-color: var(--accent);
+    }
+    input.cmd::placeholder{ color:rgba(255,255,255,0.28); }
+
+    .out{
+      color:var(--muted);
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .out b{ color:var(--text); font-weight:700; }
+    .out .k{ color:var(--accent2); }
+    .out .ok{ color:var(--accent); }
+    .out .warn{ color:var(--warn); }
+    .out .bad{ color:var(--danger); }
+
+    .grid{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:10px;
+    }
+
+    .card{
+      grid-column: span 12;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(0,0,0,0.22);
+      padding:12px 12px;
+    }
+    @media (min-width: 840px){
+      .card.half{ grid-column: span 6; }
+    }
+
+    .card h3{
+      margin:0 0 8px 0;
+      font-size:12px;
+      letter-spacing:0.8px;
+      text-transform:uppercase;
+      color:var(--dim);
+    }
+    .card .body{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    a{
+      color:var(--accent2);
+      text-decoration:none;
+      border-bottom:1px dashed rgba(102,163,255,0.35);
+    }
+    a:hover{ color: #9CC2FF; border-bottom-color: rgba(156,194,255,0.55); }
+
+    .hint{
+      margin-top:12px;
+      color:rgba(255,255,255,0.40);
+      font-size:12px;
+    }
+
+    .kbd{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      padding:2px 6px;
+      border-radius:6px;
+      font-size:12px;
+      color:rgba(255,255,255,0.70);
+    }
+
+    .footer{
+      padding:10px 18px 16px 18px;
+      border-top:1px solid var(--border);
+      color:rgba(255,255,255,0.35);
+      font-family:var(--mono);
+      font-size:12px;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:10px;
+      background:rgba(0,0,0,0.18);
+    }
+
+    .tagline{
+      color:rgba(255,255,255,0.45);
+    }
+
+    .glowline{
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(124,255,178,0.55), rgba(102,163,255,0.55), transparent);
+      opacity:0.35;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="shell" role="application" aria-label="Operator Mode Terminal">
+      <div class="topbar">
+        <div class="dots" aria-hidden="true">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+
+        <div class="title">operator://basshbj — secure console</div>
+
+        <div class="status">
+          <span class="pill">mode: <strong>prod</strong></span>
+          <span class="pill">latency: <strong id="lat">12ms</strong></span>
+        </div>
+      </div>
+
+      <div class="terminal" id="term">
+        <div class="row out">
+<span class="ok">✔</span> Connected. Welcome to <b>Operator Mode</b>.
+Type <span class="k">help</span> to see available commands.
+        </div>
+
+        <div class="glowline" aria-hidden="true"></div>
+
+        <div class="grid" aria-label="Quick panels">
+          <div class="card half">
+            <h3>Identity</h3>
+            <div class="body" id="panelIdentity">
+              <b>Bassam</b> — Senior AI / Cloud Architect<br/>
+              Tokyo, JP • Azure AI • Agents • Edge/Cloud
+            </div>
+          </div>
+          <div class="card half">
+            <h3>Links</h3>
+            <div class="body" id="panelLinks">
+              <a href="https://github.com/basshbj" target="_blank" rel="noreferrer">GitHub</a> •
+              <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a> •
+              <a href="mailto:you@example.com">Email</a>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Now</h3>
+            <div class="body" id="panelNow">
+              Building agentic systems, practical RAG, and production-ready Azure architectures.
+              I ship prototypes fast — and make them real.
+            </div>
+          </div>
+        </div>
+
+        <div class="row hint">
+          💡 Tip: press <span class="kbd">↑</span>/<span class="kbd">↓</span> for history, <span class="kbd">Tab</span> to autocomplete, <span class="kbd">Esc</span> to clear input.
+        </div>
+
+        <div class="row" id="io">
+          <div class="promptline">
+            <span class="prompt">bassam@operator:~$</span>
+            <div class="inputwrap">
+              <input class="cmd" id="cmd" autocomplete="off" spellcheck="false" placeholder="help" />
+              <span class="caret" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="tagline">🧠 serious systems • ⚙️ clean execution • 🔒 calm confidence</div>
+        <div>© <span id="year"></span> Bassam • built with HTML/CSS/JS</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 🧩 Customize here 👇
+    const PROFILE = {
+      name: "Bassam",
+      role: "Senior AI / Cloud Architect",
+      location: "Tokyo, JP",
+      focus: ["Azure AI", "Agents", "Edge/Cloud", "RAG", "Architecture"],
+      about:
+        "I build agentic systems and production Azure architectures. I like fast PoCs with real engineering discipline.",
+      highlights: [
+        "Multi-agent orchestration (tooling + evaluation + guardrails)",
+        "Azure AI Search / RAG pipelines and enterprise grounding",
+        "Edge AI demos and applied robotics experiments",
+        "System design for startups and enterprise teams"
+      ],
+      links: {
+        github: "https://github.com/basshbj",
+        linkedin: "https://www.linkedin.com/",
+        email: "you@example.com",
+        website: "https://basshbj.github.io/"
+      }
+    };
+
+    const PROJECTS = [
+      {
+        name: "Foundry IQ Knowledge Agent",
+        desc: "Agent that answers strictly from domain knowledge via a managed retrieval layer (Azure AI Search + KB tooling).",
+        stack: ["Azure AI", "AI Search", "MCP", "Agents"]
+      },
+      {
+        name: "Realtime Voice / WebSocket Demo",
+        desc: "Low-latency conversational experience using streaming and tool calls.",
+        stack: ["Realtime", "WebSockets", "Azure"]
+      },
+      {
+        name: "Edge AI Orchestration",
+        desc: "Deployable edge patterns with lightweight models, telemetry, and cloud coordination.",
+        stack: ["Edge", "SLM", "Azure", "Observability"]
+      }
+    ];
+
+    // 🧠 Terminal engine
+    const term = document.getElementById("term");
+    const cmd = document.getElementById("cmd");
+    const year = document.getElementById("year");
+    const lat = document.getElementById("lat");
+
+    year.textContent = new Date().getFullYear();
+
+    // Fake latency jitter 😄
+    setInterval(() => {
+      const ms = 8 + Math.floor(Math.random() * 18);
+      lat.textContent = ms + "ms";
+    }, 1400);
+
+    const history = [];
+    let histIndex = -1;
+
+    const commands = {
+      help: () => out(
+`Available commands:
+  help            → show commands
+  whoami          → identity summary
+  about           → short bio
+  skills          → focus areas
+  highlights      → what I do well
+  projects        → featured work
+  links           → quick links
+  contact         → contact details
+  open <name>     → open a link (github/linkedin/site/email)
+  clear           → clear the screen
+  theme           → show theme info
+  ping            → run a tiny diagnostic`
+      ),
+
+      whoami: () => out(
+`👤 ${PROFILE.name}
+🎯 ${PROFILE.role}
+📍 ${PROFILE.location}`
+      ),
+
+      about: () => out(`🧠 ${PROFILE.about}`),
+
+      skills: () => out(
+`⚙️ Focus:
+- ${PROFILE.focus.join("\n- ")}`
+      ),
+
+      highlights: () => out(
+`✅ Highlights:
+- ${PROFILE.highlights.join("\n- ")}`
+      ),
+
+      projects: () => {
+        const lines = PROJECTS.map((p, i) =>
+          `${i+1}. ${p.name}\n   ${p.desc}\n   stack: ${p.stack.join(", ")}`
+        ).join("\n\n");
+        out(`🧪 Featured Projects:\n\n${lines}`);
+      },
+
+      links: () => out(
+`🔗 Links:
+- github   → ${PROFILE.links.github}
+- linkedin → ${PROFILE.links.linkedin}
+- site     → ${PROFILE.links.website}
+- email    → mailto:${PROFILE.links.email}`
+      ),
+
+      contact: () => out(
+`📨 Contact:
+Email: ${PROFILE.links.email}
+LinkedIn: ${PROFILE.links.linkedin}`
+      ),
+
+      open: (arg) => {
+        const k = (arg || "").toLowerCase().trim();
+        const map = {
+          github: PROFILE.links.github,
+          linkedin: PROFILE.links.linkedin,
+          site: PROFILE.links.website,
+          email: `mailto:${PROFILE.links.email}`
+        };
+        if (!k) return out(`⚠️ Usage: open <github|linkedin|site|email>`, "warn");
+        const url = map[k];
+        if (!url) return out(`❌ Unknown target: ${k}`, "bad");
+        window.open(url, "_blank", "noopener,noreferrer");
+        out(`🚀 Opening ${k}…`, "ok");
+      },
+
+      clear: () => {
+        // Keep the top panels but clear output lines above input
+        const rows = Array.from(term.querySelectorAll(".row.out, .glowline"));
+        rows.forEach(r => r.remove());
+        out("🧹 Cleared. Type help.", "ok");
+      },
+
+      theme: () => out(
+`🎛 Theme:
+- operator dark
+- monospace UI
+- accent: mint + electric blue
+Tip: keep content short, confident, and measurable.`
+      ),
+
+      ping: () => out(
+`📡 Diagnostic:
+- console: ok
+- tools: ok
+- latency: ${lat.textContent}
+- status: ready ✅`, "ok"
+      ),
+    };
+
+    const completable = Object.keys(commands).concat(["open github","open linkedin","open site","open email"]);
+
+    function out(text, klass){
+      const div = document.createElement("div");
+      div.className = "row out";
+      div.innerHTML = format(text, klass);
+      const io = document.getElementById("io");
+      term.insertBefore(div, io);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function format(text, klass){
+      const safe = escapeHtml(text);
+      if (!klass) return safe;
+      return `<span class="${klass}">${safe}</span>`;
+    }
+
+    function escapeHtml(str){
+      return str
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;");
+    }
+
+    function renderPromptEcho(value){
+      const echo = document.createElement("div");
+      echo.className = "row out";
+      echo.innerHTML = `<span class="ok">➜</span> <span class="prompt">bassam@operator:~$</span> ${escapeHtml(value)}`;
+      const io = document.getElementById("io");
+      term.insertBefore(echo, io);
+    }
+
+    function run(raw){
+      const input = (raw || "").trim();
+      if (!input) return;
+
+      history.push(input);
+      histIndex = history.length;
+
+      renderPromptEcho(input);
+
+      const [name, ...rest] = input.split(" ");
+      const cmdName = name.toLowerCase();
+      const arg = rest.join(" ").trim();
+
+      if (commands[cmdName]) {
+        try {
+          commands[cmdName](arg);
+        } catch (e) {
+          out(`💥 Error: ${String(e)}`, "bad");
+        }
+        return;
+      }
+
+      // Friendly fallback
+      out(`🤖 Unknown command: "${cmdName}". Try "help".`, "warn");
+    }
+
+    // Autocomplete (Tab)
+    function autocomplete(){
+      const v = cmd.value.trim();
+      if (!v) return;
+      const matches = completable.filter(c => c.startsWith(v.toLowerCase()));
+      if (matches.length === 1){
+        cmd.value = matches[0] + (matches[0].startsWith("open ") ? "" : "");
+        return;
+      }
+      if (matches.length > 1){
+        out(`🧩 Suggestions:\n- ${matches.join("\n- ")}`);
+      }
+    }
+
+    cmd.addEventListener("keydown", (e) => {
+      if (e.key === "Enter"){
+        e.preventDefault();
+        const v = cmd.value;
+        cmd.value = "";
+        run(v);
+      }
+
+      if (e.key === "Tab"){
+        e.preventDefault();
+        autocomplete();
+      }
+
+      if (e.key === "ArrowUp"){
+        e.preventDefault();
+        if (!history.length) return;
+        histIndex = Math.max(0, histIndex - 1);
+        cmd.value = history[histIndex] || "";
+      }
+
+      if (e.key === "ArrowDown"){
+        e.preventDefault();
+        if (!history.length) return;
+        histIndex = Math.min(history.length, histIndex + 1);
+        cmd.value = history[histIndex] || "";
+      }
+
+      if (e.key === "Escape"){
+        e.preventDefault();
+        cmd.value = "";
+      }
+    });
+
+    // Focus input on click anywhere inside shell
+    document.querySelector(".shell").addEventListener("mousedown", () => {
+      setTimeout(() => cmd.focus(), 0);
+    });
+
+    // Initial focus
+    cmd.focus();
+
+    // Optional: greet with whoami on load 🙂
+    // run("whoami");
+  </script>
+</body>
+</html>
