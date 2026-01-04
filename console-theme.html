@@ -273,8 +273,8 @@ Type <span class="k">help</span> to see available commands.
           <div class="card half">
             <h3>Identity</h3>
             <div class="body" id="panelIdentity">
-              <b>Bassam</b> — Senior AI / Cloud Architect<br/>
-              Tokyo, JP • Azure AI • Agents • Edge/Cloud
+              <b>Bassam</b> - Microsoft Japan — Cloud Solution Architect<br/>
+              Osaka, JP • Digital Native • Azure • AI/Agents
             </div>
           </div>
           <div class="card half">
@@ -288,8 +288,8 @@ Type <span class="k">help</span> to see available commands.
           <div class="card">
             <h3>Now</h3>
             <div class="body" id="panelNow">
-              Building agentic systems, practical RAG, and production-ready Azure architectures.
-              I ship prototypes fast — and make them real.
+              Focusing on agentic systems, data platforms, and Azure architectures.
+              I like to code, build things, and learn new tech. My next target is <b>Quantum Computing</b>.
             </div>
           </div>
         </div>
@@ -310,50 +310,39 @@ Type <span class="k">help</span> to see available commands.
       </div>
 
       <div class="footer">
-        <div class="tagline">🧠 serious systems • ⚙️ clean execution • 🔒 calm confidence</div>
+        <div class="tagline">🧠 tech for life • ⚙️ clean code • 💡 innovative</div>
         <div>© <span id="year"></span> Bassam • built with HTML/CSS/JS</div>
       </div>
     </div>
   </div>
 
   <script>
-    // 🧩 Customize here 👇
     const PROFILE = {
       name: "Bassam",
-      role: "Senior AI / Cloud Architect",
-      location: "Tokyo, JP",
-      focus: ["Azure AI", "Agents", "Edge/Cloud", "RAG", "Architecture"],
+      role: "Senior Digital Cloud Solution Architect",
+      location: "Osaka, JP",
+      focus: ["Azure", "AI/Agents", "Edge/Cloud", "Architecture"],
       about:
-        "I build agentic systems and production Azure architectures. I like fast PoCs with real engineering discipline.",
+        "I build agentic systems and production Azure architectures. .NET background. From time to time I like to have long coding sessions.",
       highlights: [
-        "Multi-agent orchestration (tooling + evaluation + guardrails)",
+        "Multi-agent orchestration with AutoGen",
         "Azure AI Search / RAG pipelines and enterprise grounding",
-        "Edge AI demos and applied robotics experiments",
+        "Edge AI and agents for robotics",
         "System design for startups and enterprise teams"
       ],
       links: {
         github: "https://github.com/basshbj",
         linkedin: "https://www.linkedin.com/",
-        email: "you@example.com",
+        email: "bassamhbj@gmail.com",
         website: "https://basshbj.github.io/"
       }
     };
 
     const PROJECTS = [
       {
-        name: "Foundry IQ Knowledge Agent",
-        desc: "Agent that answers strictly from domain knowledge via a managed retrieval layer (Azure AI Search + KB tooling).",
-        stack: ["Azure AI", "AI Search", "MCP", "Agents"]
-      },
-      {
-        name: "Realtime Voice / WebSocket Demo",
-        desc: "Low-latency conversational experience using streaming and tool calls.",
-        stack: ["Realtime", "WebSockets", "Azure"]
-      },
-      {
-        name: "Edge AI Orchestration",
-        desc: "Deployable edge patterns with lightweight models, telemetry, and cloud coordination.",
-        stack: ["Edge", "SLM", "Azure", "Observability"]
+        name: "TODO",
+        desc: "Placeholder project",
+        stack: ["Azure", "AI"]
       }
     ];
 
@@ -388,7 +377,8 @@ Type <span class="k">help</span> to see available commands.
   open <name>     → open a link (github/linkedin/site/email)
   clear           → clear the screen
   theme           → show theme info
-  ping            → run a tiny diagnostic`
+  ping            → run a tiny diagnostic
+  eastereggs      → experiments I am working on`
       ),
 
       whoami: () => out(
@@ -397,7 +387,7 @@ Type <span class="k">help</span> to see available commands.
 📍 ${PROFILE.location}`
       ),
 
-      about: () => out(`🧠 ${PROFILE.about}`),
+      about: () => out(`${PROFILE.about}`),
 
       skills: () => out(
 `⚙️ Focus:
@@ -456,8 +446,7 @@ LinkedIn: ${PROFILE.links.linkedin}`
 `🎛 Theme:
 - operator dark
 - monospace UI
-- accent: mint + electric blue
-Tip: keep content short, confident, and measurable.`
+- accent: mint + electric blue`
       ),
 
       ping: () => out(
@@ -467,6 +456,10 @@ Tip: keep content short, confident, and measurable.`
 - latency: ${lat.textContent}
 - status: ready ✅`, "ok"
       ),
+
+      eastereggs: () => out(
+        `Comming soon...`
+      )
     };
 
     const completable = Object.keys(commands).concat(["open github","open linkedin","open site","open email"]);
@@ -582,7 +575,7 @@ Tip: keep content short, confident, and measurable.`
     // Initial focus
     cmd.focus();
 
-    // Optional: greet with whoami on load 🙂
+    // Greet with whoami on load  
     // run("whoami");
   </script>
 </body>
